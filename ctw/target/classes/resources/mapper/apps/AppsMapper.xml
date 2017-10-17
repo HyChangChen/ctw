@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.ctw.dao.apps.IAppsDao">
+
+	<resultMap id="AppsEntity" type="com.ctw.domain.apps.AppsEntity">
+        <result property="appsid" column="appsid"/>
+        <result property="app" column="app"/>
+        <result property="apptype" column="apptype"/>
+        <result property="custapptype" column="custapptype"/>
+        <result property="deletee" column="deletee"/>
+        <result property="description" column="description"/>
+        <result property="groupname" column="groupname"/>
+        <result property="insertt" column="insertt"/>
+        <result property="ismobile" column="ismobile"/>
+        <result property="keyattribute" column="keyattribute"/>
+        <result property="objectname" column="objectname"/>
+        <result property="maxappsid" column="maxappsid"/>
+        <result property="module" column="module"/>
+        <result property="orderby" column="orderby"/>
+        <result property="originalapp" column="originalapp"/>
+        <result property="readd" column="readd"/>
+        <result property="restrictions" column="restrictions"/>
+        <result property="save" column="save"/>
+        <result property="viewport" column="viewport"/>
+        <result property="datasrc" column="datasrc"/>
+	</resultMap>
+
+	<resultMap id="Apps" type="com.ctw.domain.apps.Apps">
+        <result property="appsid" column="appsid"/>
+        <result property="app" column="app"/>
+        <result property="apptype" column="apptype"/>
+        <result property="custapptype" column="custapptype"/>
+        <result property="deletee" column="deletee"/>
+        <result property="description" column="description"/>
+        <result property="groupname" column="groupname"/>
+        <result property="insertt" column="insertt"/>
+        <result property="ismobile" column="ismobile"/>
+        <result property="keyattribute" column="keyattribute"/>
+        <result property="objectname" column="objectname"/>
+        <result property="maxappsid" column="maxappsid"/>
+        <result property="module" column="module"/>
+        <result property="orderby" column="orderby"/>
+        <result property="originalapp" column="originalapp"/>
+        <result property="readd" column="readd"/>
+        <result property="restrictions" column="restrictions"/>
+        <result property="save" column="save"/>
+        <result property="viewport" column="viewport"/>
+        <result property="datasrc" column="datasrc"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	    <![CDATA[
+		appsid,app,apptype,custapptype,deletee,description,groupname,insertt,ismobile,keyattribute,objectname,maxappsid,module,orderby,originalapp,readd,restrictions,save,viewport,datasrc
+	    ]]>
+	</sql>
+
+	<insert id="create">
+        INSERT INTO apps (
+        	appsid ,
+        	app ,
+        	apptype ,
+        	custapptype ,
+        	deletee ,
+        	description ,
+        	groupname ,
+        	insertt ,
+        	ismobile ,
+        	keyattribute ,
+        	objectname ,
+        	maxappsid ,
+        	module ,
+        	orderby ,
+        	originalapp ,
+        	readd ,
+        	restrictions ,
+        	save ,
+        	viewport ,
+        	datasrc 
+        ) VALUES (
+        	#{appsid, jdbcType=VARCHAR} ,
+        	#{app, jdbcType=VARCHAR} ,
+        	#{apptype, jdbcType=VARCHAR} ,
+        	#{custapptype, jdbcType=VARCHAR} ,
+        	#{deletee, jdbcType=INTEGER} ,
+        	#{description, jdbcType=VARCHAR} ,
+        	#{groupname, jdbcType=VARCHAR} ,
+        	#{insertt, jdbcType=INTEGER} ,
+        	#{ismobile, jdbcType=INTEGER} ,
+        	#{keyattribute, jdbcType=VARCHAR} ,
+        	#{objectname, jdbcType=VARCHAR} ,
+        	#{maxappsid, jdbcType=VARCHAR} ,
+        	#{module, jdbcType=VARCHAR} ,
+        	#{orderby, jdbcType=VARCHAR} ,
+        	#{originalapp, jdbcType=VARCHAR} ,
+        	#{readd, jdbcType=INTEGER} ,
+        	#{restrictions, jdbcType=VARCHAR} ,
+        	#{save, jdbcType=INTEGER} ,
+        	#{viewport, jdbcType=VARCHAR} ,
+        	#{datasrc, jdbcType=LONGVARCHAR} 
+        )
+	</insert>
+
+	<update id="update" >
+        UPDATE apps
+           SET
+	           app = #{app, jdbcType=VARCHAR} ,
+	           apptype = #{apptype, jdbcType=VARCHAR} ,
+	           custapptype = #{custapptype, jdbcType=VARCHAR} ,
+	           deletee = #{deletee, jdbcType=INTEGER} ,
+	           description = #{description, jdbcType=VARCHAR} ,
+	           groupname = #{groupname, jdbcType=VARCHAR} ,
+	           insertt = #{insertt, jdbcType=INTEGER} ,
+	           ismobile = #{ismobile, jdbcType=INTEGER} ,
+	           keyattribute = #{keyattribute, jdbcType=VARCHAR} ,
+	           objectname = #{objectname, jdbcType=VARCHAR} ,
+	           maxappsid = #{maxappsid, jdbcType=VARCHAR} ,
+	           module = #{module, jdbcType=VARCHAR} ,
+	           orderby = #{orderby, jdbcType=VARCHAR} ,
+	           originalapp = #{originalapp, jdbcType=VARCHAR} ,
+	           readd = #{readd, jdbcType=INTEGER} ,
+	           restrictions = #{restrictions, jdbcType=VARCHAR} ,
+	           save = #{save, jdbcType=INTEGER} ,
+	           viewport = #{viewport, jdbcType=VARCHAR} ,
+	           datasrc = #{datasrc, jdbcType=LONGVARCHAR} 
+         WHERE
+	           appsid = #{appsid, jdbcType=VARCHAR} 
+	</update>
+
+    <delete id="deleteById">
+        DELETE FROM apps WHERE
+        appsid = #{appsid, jdbcType=VARCHAR} 
+    </delete>
+
+	<delete id="batchDelete" parameterType="string">
+		DELETE FROM apps WHERE appsid  IN
+		<foreach item= "appsid"  collection="array" open="(" separator="," close=")">
+			#{appsid, jdbcType=VARCHAR} 
+		</foreach>
+	</delete>
+
+    <select id="getById" resultMap="AppsEntity">
+		SELECT <include refid="columns" />
+		FROM apps WHERE
+		appsid = #{appsid, jdbcType=VARCHAR} 
+	</select>
+
+
+	<sql id="findWhere">
+		<where>
+		<if test="@Ognl@isNotEmpty(appsid)">
+			AND appsid 	like CONCAT('%', #{appsid, jdbcType=VARCHAR} ,'%'))
+		</if>
+		<if test="@Ognl@isNotEmpty(app)">
+			AND app 	like CONCAT('%', #{app, jdbcType=VARCHAR} ,'%'))
+		</if>
+		<if test="@Ognl@isNotEmpty(apptype)">
+			AND apptype 	like CONCAT('%', #{apptype, jdbcType=VARCHAR} ,'%'))
+		</if>
+		<if test="@Ognl@isNotEmpty(custapptype)">
+			AND custapptype 	like CONCAT('%', #{custapptype, jdbcType=VARCHAR} ,'%'))
+		</if>
+		<if test="@Ognl@isNotEmpty(deletee)">
+			AND deletee 	like CONCAT('%', #{deletee, jdbcType=INTEGER} ,'%'))
+		</if>
+		<if test="@Ognl@isNotEmpty(description)">
+			AND description 	like CONCAT('%', #{description, jdbcType=VARCHAR} ,'%'))
+		</if>
+		<if test="@Ognl@isNotEmpty(groupname)">
+			AND groupname 	like CONCAT('%', #{groupname, jdbcType=VARCHAR} ,'%'))
+		</if>
+		<if test="@Ognl@isNotEmpty(insertt)">
+			AND insertt 	like CONCAT('%', #{insertt, jdbcType=INTEGER} ,'%'))
+		</if>
+		<if test="@Ognl@isNotEmpty(ismobile)">
+			AND ismobile 	like CONCAT('%', #{ismobile, jdbcType=INTEGER} ,'%'))
+		</if>
+		<if test="@Ognl@isNotEmpty(keyattribute)">
+			AND keyattribute 	like CONCAT('%', #{keyattribute, jdbcType=VARCHAR} ,'%'))
+		</if>
+		<if test="@Ognl@isNotEmpty(objectname)">
+			AND objectname 	like CONCAT('%', #{objectname, jdbcType=VARCHAR} ,'%'))
+		</if>
+		<if test="@Ognl@isNotEmpty(maxappsid)">
+			AND maxappsid 	like CONCAT('%', #{maxappsid, jdbcType=VARCHAR} ,'%'))
+		</if>
+		<if test="@Ognl@isNotEmpty(module)">
+			AND module 	like CONCAT('%', #{module, jdbcType=VARCHAR} ,'%'))
+		</if>
+		<if test="@Ognl@isNotEmpty(orderby)">
+			AND orderby 	like CONCAT('%', #{orderby, jdbcType=VARCHAR} ,'%'))
+		</if>
+		<if test="@Ognl@isNotEmpty(originalapp)">
+			AND originalapp 	like CONCAT('%', #{originalapp, jdbcType=VARCHAR} ,'%'))
+		</if>
+		<if test="@Ognl@isNotEmpty(readd)">
+			AND readd 	like CONCAT('%', #{readd, jdbcType=INTEGER} ,'%'))
+		</if>
+		<if test="@Ognl@isNotEmpty(restrictions)">
+			AND restrictions 	like CONCAT('%', #{restrictions, jdbcType=VARCHAR} ,'%'))
+		</if>
+		<if test="@Ognl@isNotEmpty(save)">
+			AND save 	like CONCAT('%', #{save, jdbcType=INTEGER} ,'%'))
+		</if>
+		<if test="@Ognl@isNotEmpty(viewport)">
+			AND viewport 	like CONCAT('%', #{viewport, jdbcType=VARCHAR} ,'%'))
+		</if>
+		<if test="@Ognl@isNotEmpty(datasrc)">
+			AND datasrc 	like CONCAT('%', #{datasrc, jdbcType=LONGVARCHAR} ,'%'))
+		</if>
+
+		</where>
+	</sql>
+
+    <select id="findListCount" resultType="long">
+        SELECT COUNT(*) FROM apps
+		<include refid="findWhere"/>
+    </select>
+
+    <select id="findList" resultMap="Apps">
+    	SELECT <include refid="columns" />
+	    FROM apps
+
+		<include refid="findWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+
+
+</mapper>
+

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.ctw.dao.org.IOrgDao">
+
+    <resultMap id="OrgEntity" type="com.ctw.domain.org.OrgEntity">
+        <result property="id" column="id"/>
+        <result property="orgName" column="org_name"/>
+        <result property="partentId" column="partent_id"/>
+        <result property="leaf" column="leaf"/>
+        <result property="isValid" column="is_valid"/>
+        <result property="ts" column="ts"/>
+        <result property="createNameId" column="create_name_id"/>
+        <result property="icon" column="icon"/>
+    </resultMap>
+
+    <resultMap id="Org" type="com.ctw.domain.org.Org">
+        <result property="id" column="id"/>
+        <result property="orgName" column="org_name"/>
+        <result property="partentId" column="partent_id"/>
+        <result property="leaf" column="leaf"/>
+        <result property="isValid" column="is_valid"/>
+        <result property="ts" column="ts"/>
+        <result property="createNameId" column="create_name_id"/>
+        <result property="icon" column="icon"/>
+        <result property="patrentName" column="patrentName"/>
+    </resultMap>
+
+    <!-- 用于select查询公用抽取的列 -->
+    <sql id="columns">
+		id,org_name,IFNULL(partent_id,0) as partentId ,leaf,is_valid,ts,create_name_id,icon
+	</sql>
+
+    <insert id="create">
+        INSERT INTO t_sys_org (
+        	id ,
+        	org_name ,
+        	partent_id ,
+        	leaf ,
+        	is_valid ,
+        	ts ,
+        	create_name_id ,
+        	icon 
+        ) VALUES (
+        	#{id, jdbcType=INTEGER} ,
+        	#{orgName, jdbcType=VARCHAR} ,
+        	#{partentId, jdbcType=INTEGER} ,
+        	#{leaf, jdbcType=INTEGER} ,
+        	#{isValid, jdbcType=INTEGER} ,
+        	#{ts, jdbcType=TIMESTAMP} ,
+        	#{createNameId, jdbcType=INTEGER} ,
+        	#{icon, jdbcType=VARCHAR} 
+        )
+	</insert>
+
+    <update id="update">
+        UPDATE t_sys_org
+        SET
+        <if test="@Ognl@isNotEmpty(orgName)">
+            org_name = #{orgName, jdbcType=VARCHAR}
+        </if>
+        <if test="@Ognl@isNotEmpty(partentId)">
+            partent_id = #{partentId, jdbcType=INTEGER} ,
+        </if>
+        <if test="@Ognl@isNotEmpty(leaf)">
+            leaf = #{leaf, jdbcType=INTEGER}
+        </if>
+        <if test="@Ognl@isNotEmpty(isValid)">
+            is_valid = #{isValid, jdbcType=INTEGER}
+        </if>
+
+        <if test="@Ognl@isNotEmpty(createNameId)">
+            create_name_id = #{createNameId, jdbcType=INTEGER}
+        </if>
+        <if test="@Ognl@isNotEmpty(icon)">
+            icon = #{icon, jdbcType=VARCHAR}
+        </if>
+
+        WHERE
+        id = #{id, jdbcType=INTEGER}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM t_sys_org WHERE
+        id = #{id, jdbcType=INTEGER} 
+    </delete>
+
+    <select id="getById" resultMap="OrgEntity">
+        SELECT
+        <include refid="columns"/>
+		  FROM t_sys_org
+	     WHERE 
+		       id = #{id, jdbcType=INTEGER} 
+    </select>
+
+
+    <sql id="findWhere">
+        <!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+        <where>
+            <if test="@Ognl@isNotEmpty(id)">
+                AND id = #{id, jdbcType=INTEGER}
+            </if>
+            <if test="@Ognl@isNotEmpty(orgName)">
+                AND org_name = #{orgName, jdbcType=VARCHAR}
+            </if>
+            <if test="@Ognl@isNotEmpty(partentId)">
+                FIND_IN_SET(id, getOrgChildLst(#{partentId,jdbcType=INTEGER}))
+            </if>
+            <if test="@Ognl@isNotEmpty(leaf)">
+                AND leaf = #{leaf, jdbcType=INTEGER}
+            </if>
+            <if test="@Ognl@isNotEmpty(isValid)">
+                AND is_valid = #{isValid, jdbcType=INTEGER}
+            </if>
+            <if test="@Ognl@isNotEmpty(tsBegin)">
+                AND ts >= #{tsBegin}
+            </if>
+            <if test="@Ognl@isNotEmpty(tsEnd)">
+                AND ts &lt;= #{tsEnd}
+            </if>
+            <if test="@Ognl@isNotEmpty(createNameId)">
+                AND create_name_id = #{createNameId, jdbcType=INTEGER}
+            </if>
+            <if test="@Ognl@isNotEmpty(icon)">
+                AND icon = #{icon, jdbcType=VARCHAR}
+            </if>
+        </where>
+    </sql>
+
+    <select id="findListCount" resultType="long">
+        SELECT COUNT(*) FROM t_sys_org
+        <include refid="findWhere"/>
+    </select>
+
+    <select id="findList" resultMap="Org">
+        SELECT
+        <include refid="columns"/>
+        FROM t_sys_org
+        <include refid="findWhere"/>
+
+        <if test="@Ognl@isNotEmpty(sortColumns)">
+            ORDER BY ${sortColumns}
+        </if>
+    </select>
+
+
+    <select id="findByPartentIdCount" resultType="long">
+        SELECT COUNT(*)
+        FROM t_sys_org t1,t_sys_org t2
+        where t2.id=t1.partent_id
+
+        <if test="@Ognl@isNotEmpty(partentId)">
+            AND t1.partent_id=#{partentId,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <select id="findByPartentId" resultMap="Org">
+        SELECT
+        t1.id,t1.org_name,IFNULL(t1.partent_id,0) as partentId ,t1.leaf,t1.is_valid,t1.ts,t1.create_name_id,t1.icon ,
+        t2.org_name patrentName
+        FROM t_sys_org t1,t_sys_org t2
+        where t2.id=t1.partent_id
+
+        <if test="@Ognl@isNotEmpty(partentId)">
+            AND t1.partent_id=#{partentId,jdbcType=INTEGER}
+        </if>
+
+        <if test="@Ognl@isNotEmpty(sortColumns)">
+            ORDER BY ${sortColumns}
+        </if>
+    </select>
+</mapper>
+

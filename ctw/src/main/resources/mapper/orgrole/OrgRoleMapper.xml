@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.ctw.dao.orgrole.IOrgRoleDao">
+
+	<resultMap id="OrgRoleEntity" type="com.ctw.domain.orgrole.OrgRoleEntity">
+        <result property="id"   column="id"/>
+        <result property="orgId"   column="org_id"/>
+        <result property="roleId"   column="role_id"/>
+        <result property="ts"   column="ts"/>
+	</resultMap>
+
+	<resultMap id="OrgRole" type="com.ctw.domain.orgrole.OrgRole">
+        <result property="id" column="id"/>
+        <result property="orgId" column="org_id"/>
+        <result property="roleId" column="role_id"/>
+        <result property="ts" column="ts"/>
+	</resultMap>
+
+	<resultMap id="OrgRoleOther" type="com.ctw.domain.orgrole.OrgRole">
+        <result property="id" column="id"/>
+        <result property="orgId" column="org_id"/>
+        <result property="roleId" column="role_id"/>
+        <result property="orgName" column="org_name"/>
+
+        <result property="ts" column="ts"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	    <![CDATA[
+		id,org_id,role_id,ts
+	    ]]>
+	</sql>
+
+	<insert id="create">
+    <![CDATA[
+        INSERT INTO t_sys_org_role (
+        	id ,
+        	org_id ,
+        	role_id ,
+        	ts 
+        ) VALUES (
+        	#{id, jdbcType=INTEGER} ,
+        	#{orgId, jdbcType=INTEGER} ,
+        	#{roleId, jdbcType=INTEGER} ,
+        	#{ts, jdbcType=TIMESTAMP} 
+        )
+    ]]>
+	</insert>
+
+	<update id="update" >
+    <![CDATA[
+        UPDATE t_sys_org_role
+           SET
+	           org_id = #{orgId, jdbcType=INTEGER} ,
+	           role_id = #{roleId, jdbcType=INTEGER} ,
+	           ts = #{ts, jdbcType=TIMESTAMP} 
+         WHERE
+	           id = #{id, jdbcType=INTEGER} 
+    ]]>
+	</update>
+
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM t_sys_org_role WHERE
+        id = #{id, jdbcType=INTEGER} 
+    ]]>
+    </delete>
+
+    <select id="getById" resultMap="OrgRoleEntity">
+		SELECT <include refid="columns" />
+	    <![CDATA[
+		  FROM t_sys_org_role
+	     WHERE 
+		       id = #{id, jdbcType=INTEGER} 
+	    ]]>
+	</select>
+	<delete id="deleteByOrgIdRId"  >
+		DELETE FROM t_sys_org_role
+		WHERE
+		org_id = #{orgId,jdbcType=INTEGER}
+		AND
+		role_id=#{roleId,jdbcType=INTEGER}
+
+	</delete>
+
+	<sql id="findWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	        <if test="@Ognl@isNotEmpty(id)">
+				AND id = #{id, jdbcType=INTEGER}
+			</if>
+	        <if test="@Ognl@isNotEmpty(orgId)">
+				AND org_id = #{orgId, jdbcType=INTEGER}
+			</if>
+	        <if test="@Ognl@isNotEmpty(roleId)">
+				AND role_id = #{roleId, jdbcType=INTEGER}
+			</if>
+	        <if test="@Ognl@isNotEmpty(tsBegin)">
+				AND ts >= #{tsBegin}
+		    </if>
+		    <if test="@Ognl@isNotEmpty(tsEnd)">
+				AND ts &lt;= #{tsEnd}
+		    </if>
+		</where>
+	</sql>
+
+    <select id="findListCount" resultType="long">
+        SELECT COUNT(*) FROM t_sys_org_role
+		<include refid="findWhere"/>
+    </select>
+
+    <select id="findList" resultMap="OrgRole">
+    	SELECT <include refid="columns" />
+	    FROM t_sys_org_role
+		<include refid="findWhere"/>
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+
+    <select id="findListByRoleId" resultMap="OrgRoleOther">
+		SELECT
+		tsor.*,  tso.org_name org_name
+		FROM
+		t_sys_org_role tsor,
+		t_sys_org tso
+		WHERE
+		tsor.org_id =tso.id
+
+		<if test="@Ognl@isNotEmpty(roleId)">
+			AND role_id = #{roleId, jdbcType=INTEGER}
+		</if>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+
+
+</mapper>
+

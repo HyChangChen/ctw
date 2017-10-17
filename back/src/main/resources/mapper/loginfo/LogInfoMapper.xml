@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.ctw.dao.loginfo.ILogInfoDao">
+
+	<resultMap id="LogInfoEntity" type="com.ctw.domain.loginfo.LogInfoEntity">
+		<result property="id" column="id"/>
+		<result property="functionName" column="function_name"/>
+		<result property="params" column="params"/>
+		<result property="contimes" column="contimes"/>
+		<result property="ipAddress" column="ip_address"/>
+		<result property="macAddress" column="mac_address"/>
+		<result property="message" column="message"/>
+		<result property="username" column="username"/>
+		<result property="logLevel" column="log_level"/>
+		<result property="createTime" column="create_time"/>
+	</resultMap>
+
+	<resultMap id="LogInfo" type="com.ctw.domain.loginfo.LogInfo">
+		<result property="id" column="id"/>
+		<result property="functionName" column="function_name"/>
+		<result property="params" column="params"/>
+		<result property="contimes" column="contimes"/>
+		<result property="ipAddress" column="ip_address"/>
+		<result property="macAddress" column="mac_address"/>
+		<result property="message" column="message"/>
+		<result property="username" column="username"/>
+		<result property="logLevel" column="log_level"/>
+		<result property="createTime" column="create_time"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+		<![CDATA[
+		id,function_name,params,contimes,ip_address,mac_address,message,username,log_level,create_time
+	    ]]>
+	</sql>
+
+	<insert id="create" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_sys_log_info (
+		id ,
+		function_name ,
+		params ,
+		contimes ,
+		ip_address ,
+		mac_address ,
+		message ,
+		username ,
+		log_level ,
+		create_time
+		) VALUES (
+		#{id, jdbcType=BIGINT} ,
+		#{functionName, jdbcType=VARCHAR} ,
+		#{params, jdbcType=VARCHAR} ,
+		#{contimes, jdbcType=VARCHAR} ,
+		#{ipAddress, jdbcType=VARCHAR} ,
+		#{macAddress, jdbcType=VARCHAR} ,
+		#{message, jdbcType=VARCHAR} ,
+		#{username, jdbcType=VARCHAR} ,
+		#{logLevel, jdbcType=VARCHAR} ,
+		#{createTime, jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<update id="update" >
+		UPDATE t_sys_log_info
+		SET
+		function_name = #{functionName, jdbcType=VARCHAR} ,
+		params = #{params, jdbcType=VARCHAR} ,
+		contimes = #{contimes, jdbcType=VARCHAR} ,
+		ip_address = #{ipAddress, jdbcType=VARCHAR} ,
+		mac_address = #{macAddress, jdbcType=VARCHAR} ,
+		message = #{message, jdbcType=VARCHAR} ,
+		username = #{username, jdbcType=VARCHAR} ,
+		log_level = #{logLevel, jdbcType=VARCHAR} ,
+		create_time = #{createTime, jdbcType=TIMESTAMP}
+		WHERE
+		id = #{id, jdbcType=BIGINT}
+	</update>
+
+	<delete id="deleteById">
+		DELETE FROM t_sys_log_info WHERE
+		id = #{id, jdbcType=BIGINT}
+	</delete>
+
+	<delete id="batchDelete" parameterType="string">
+		DELETE FROM t_sys_log_info WHERE id  IN
+		<foreach item= "id"  collection="array" open="(" separator="," close=")">
+			#{id, jdbcType=BIGINT}
+		</foreach>
+	</delete>
+
+	<select id="getById" resultMap="LogInfoEntity">
+		SELECT <include refid="columns" />
+		FROM t_sys_log_info WHERE
+		id = #{id, jdbcType=BIGINT}
+	</select>
+
+
+	<sql id="findWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(id)">
+				AND id = #{id, jdbcType=BIGINT}
+			</if>
+			<if test="@Ognl@isNotEmpty(functionName)">
+				AND function_name = #{functionName, jdbcType=VARCHAR}
+			</if>
+			<if test="@Ognl@isNotEmpty(params)">
+				AND params = #{params, jdbcType=VARCHAR}
+			</if>
+			<if test="@Ognl@isNotEmpty(contimes)">
+				AND contimes = #{contimes, jdbcType=VARCHAR}
+			</if>
+			<if test="@Ognl@isNotEmpty(ipAddress)">
+				AND ip_address = #{ipAddress, jdbcType=VARCHAR}
+			</if>
+			<if test="@Ognl@isNotEmpty(macAddress)">
+				AND mac_address = #{macAddress, jdbcType=VARCHAR}
+			</if>
+			<if test="@Ognl@isNotEmpty(message)">
+				AND message = #{message, jdbcType=VARCHAR}
+			</if>
+			<if test="@Ognl@isNotEmpty(username)">
+				AND username = #{username, jdbcType=VARCHAR}
+			</if>
+			<if test="@Ognl@isNotEmpty(logLevel)">
+				AND log_level = #{logLevel, jdbcType=VARCHAR}
+			</if>
+			<if test="@Ognl@isNotEmpty(createTime)">
+				AND create_time = #{createTime, jdbcType=TIMESTAMP}
+			</if>
+
+			<if test="@Ognl@isNotEmpty(createTimeRange)">
+				AND create_time >= STR_TO_DATE(SUBSTRING_INDEX(#{createTimeRange},'~',1), '%Y-%m-%d')
+				AND create_time &lt; STR_TO_DATE(DATE_ADD(SUBSTRING_INDEX(#{createTimeRange},'~',-1),INTERVAL 1 day), '%Y-%m-%d')
+			</if>
+		</where>
+	</sql>
+
+	<select id="findListCount" resultType="long">
+		SELECT COUNT(*) FROM t_sys_log_info
+		<include refid="findWhere"/>
+	</select>
+
+	<select id="findList" resultMap="LogInfo">
+		SELECT <include refid="columns" />
+		FROM t_sys_log_info
+
+		<include refid="findWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+	</select>
+
+
+</mapper>
+

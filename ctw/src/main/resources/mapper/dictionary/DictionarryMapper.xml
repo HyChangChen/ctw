@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.ctw.dao.dictionary.IDictionarryDao">
+
+	<resultMap id="DictionarryEntity" type="com.ctw.domain.dictionary.DictionarryEntity">
+        <result property="id" column="id"/>
+        <result property="remark" column="remark"/>
+        <result property="text" column="text"/>
+        <result property="value" column="value"/>
+        <result property="description" column="description"/>
+        <result property="active" column="active"/>
+        <result property="changedate" column="changedate"/>
+        <result property="changeby" column="changeby"/>
+        <result property="currencyid" column="currencyid"/>
+        <result property="type" column="type"/>
+        <result property="orgid" column="ORGID"/>
+        <result property="siteid" column="SITEID"/>
+	</resultMap>
+
+	<resultMap id="Dictionarry" type="com.ctw.domain.dictionary.Dictionarry">
+        <result property="id" column="id"/>
+        <result property="remark" column="remark"/>
+        <result property="text" column="text"/>
+        <result property="value" column="value"/>
+
+        <result property="description" column="description"/>
+        <result property="active" column="active"/>
+        <result property="changedate" column="changedate"/>
+        <result property="changeby" column="changeby"/>
+        <result property="currencyid" column="currencyid"/>
+        <result property="type" column="type"/>
+        <result property="typeVal" column="typeVal"/>
+        <result property="orgid" column="ORGID"/>
+        <result property="siteid" column="SITEID"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	    <![CDATA[
+		id,remark,text,value,description,active,changedate,changeby,currencyid,type,ORGID,SITEID
+	    ]]>
+	</sql>
+
+	<insert id="create">
+        INSERT INTO t_sys_data_dictionary (
+        	id ,
+        	remark ,
+        	text ,
+        	value,
+        	description ,
+        	active ,
+        	changedate ,
+        	changeby ,
+        	currencyid ,
+        	type ,
+        	ORGID ,
+        	SITEID
+        ) VALUES (
+        	#{id, jdbcType=INTEGER} ,
+        	#{remark, jdbcType=VARCHAR} ,
+        	#{text, jdbcType=VARCHAR} ,
+        	#{value, jdbcType=VARCHAR} ,
+        	#{description, jdbcType=VARCHAR} ,
+        	#{active, jdbcType=VARCHAR} ,
+        	#{changedate, jdbcType=TIMESTAMP} ,
+        	#{changeby, jdbcType=VARCHAR} ,
+        	#{currencyid, jdbcType=VARCHAR} ,
+        	#{type, jdbcType=INTEGER} ,
+        	#{orgid, jdbcType=VARCHAR} ,
+        	#{siteid, jdbcType=VARCHAR}
+        )
+	</insert>
+
+	<update id="update" >
+        UPDATE t_sys_data_dictionary
+           SET
+	           remark = #{remark, jdbcType=VARCHAR} ,
+	           text = #{text, jdbcType=VARCHAR} ,
+	           value = #{value, jdbcType=VARCHAR} ,
+	           description = #{description, jdbcType=VARCHAR} ,
+	           active = #{active, jdbcType=VARCHAR} ,
+	           changedate = #{changedate, jdbcType=TIMESTAMP} ,
+	           changeby = #{changeby, jdbcType=VARCHAR} ,
+	           currencyid = #{currencyid, jdbcType=VARCHAR} ,
+	           type = #{type, jdbcType=INTEGER} ,
+	           ORGID = #{orgid, jdbcType=VARCHAR} ,
+	           SITEID = #{siteid, jdbcType=VARCHAR}
+         WHERE
+	           id = #{id, jdbcType=INTEGER}
+	</update>
+
+    <delete id="deleteById">
+        DELETE FROM t_sys_data_dictionary WHERE
+        id = #{id, jdbcType=INTEGER}
+    </delete>
+
+	<delete id="batchDelete" parameterType="string">
+		DELETE FROM t_sys_data_dictionary WHERE id  IN
+		<foreach item= "id"  collection="array" open="(" separator="," close=")">
+			#{id, jdbcType=INTEGER}
+		</foreach>
+	</delete>
+
+    <select id="getById" resultMap="DictionarryEntity">
+		SELECT <include refid="columns" />
+		FROM t_sys_data_dictionary WHERE
+		id = #{id, jdbcType=INTEGER}
+	</select>
+
+
+	<sql id="findWhere">
+		<where>
+			   type= tst.id
+		<if test="@Ognl@isNotEmpty(id)">
+			AND id = #{id, jdbcType=INTEGER}
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			AND remark = #{remark, jdbcType=VARCHAR}
+		</if>
+		<if test="@Ognl@isNotEmpty(text)">
+			AND text = #{text, jdbcType=VARCHAR}
+		</if><if test="@Ognl@isNotEmpty(value)">
+			AND value = #{value, jdbcType=VARCHAR}
+		</if>
+		<if test="@Ognl@isNotEmpty(description)">
+			AND description = #{description, jdbcType=VARCHAR}
+		</if>
+		<if test="@Ognl@isNotEmpty(active)">
+			AND active = #{active, jdbcType=VARCHAR}
+		</if>
+		<if test="@Ognl@isNotEmpty(changedate)">
+			AND changedate = #{changedate, jdbcType=TIMESTAMP}
+		</if>
+		<if test="@Ognl@isNotEmpty(changeby)">
+			AND changeby = #{changeby, jdbcType=VARCHAR}
+		</if>
+		<if test="@Ognl@isNotEmpty(currencyid)">
+			AND currencyid = #{currencyid, jdbcType=VARCHAR}
+		</if>
+		<if test="@Ognl@isNotEmpty(type)">
+			AND type = #{type, jdbcType=INTEGER}
+		</if>
+		<if test="@Ognl@isNotEmpty(orgid)">
+			AND ORGID = #{orgid, jdbcType=VARCHAR}
+		</if>
+		<if test="@Ognl@isNotEmpty(typeVal)">
+			AND tst.code = #{typeVal, jdbcType=VARCHAR}
+		</if>
+		<if test="@Ognl@isNotEmpty(siteid)">
+			AND SITEID = #{siteid, jdbcType=VARCHAR}
+		</if>
+
+		<if test="@Ognl@isNotEmpty(changedateRange)">
+			AND changedate >= STR_TO_DATE(SUBSTRING_INDEX(#{changedateRange},'~',1), '%Y-%m-%d')
+			AND changedate &lt; STR_TO_DATE(DATE_ADD(SUBSTRING_INDEX(#{changedateRange},'~',-1),INTERVAL 1 day), '%Y-%m-%d')
+		</if>
+		</where>
+	</sql>
+
+    <select id="findListCount" resultType="long">
+		SELECT COUNT(1) FROM (SELECT tsdd.*,tst.description as typeVal FROM t_sys_data_dictionary tsdd ,
+		t_sys_type tst
+		<include refid="findWhere"/>)a
+    </select>
+
+    <select id="findList" resultMap="Dictionarry">
+    	SELECT tsdd.*,tst.description as typeVal FROM t_sys_data_dictionary tsdd   ,
+		t_sys_type  tst
+		<include refid="findWhere"/>
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+
+
+</mapper>
+
