@@ -1,0 +1,97 @@
+  <div class="tabbable tabs-hxqh" wtype="tab" id="14136219988" style="display: block;">
+   <div class="widget-header header-color-blue">
+        <ul class="nav nav-tabs padding-12 pull-left" role="tablist">
+         <li id="14136211872" class="active" wtype="tabgroup" style="list-style-type: none; display: block; position: relative;"><a id="ui-id-2" class="ui-tabs-anchor" role="presentation" tabindex="-1" hid="tabconfig"><font hid="label">List</font></a></li>
+         <li id="14136211873" class="active" wtype="tabgroup" style="list-style-type: none; display: block;"><a id="ui-id-2" class="ui-tabs-anchor" role="presentation" tabindex="-1" hid="tabconfig"><font hid="label">info</font></a></li>
+       </ul>
+   </div>
+   <div id="tab_content">
+       <div style="display: block;" id="tabcon_14136211872" flag="tabflage" class="tab-content">
+              <div class="layout">
+                    <div id="14136212226" style="display: block;" class="widget" wtype="table">
+                          <div datasource="${tableName}" class="ttable" hid="tableflage" id="tableid" editable="false" query="1=1"
+                               mulquery=" select * from ${tableName} ">
+                                 <#list table.columns as column>
+                                <div id="${column.columnNameLower}" wtype="tablecol" class="widget" style="display: block; float: left;">
+                                        <div class="column">
+                                         <label datasource=" ${column.columnNameLower} " class="label_font W80" hid="label" >${column.columnAlias}</label>
+                                        </div>
+                                 </div>
+                               </#list>
+                          </div>
+                    </div>
+              </div>
+        </div>
+    <div style="display: block;" id="tabcon_14136211873" flag="tabflage" class="tab-content">
+     <div class="layout">
+      <div id="14136227707" style="display: block;" class="widget" wtype="column3">
+          <div>
+                 <h4 class="header blue bolder">基本信息</h4>
+                 <div class="row">
+                      <div class="form-horizontal" role="form">
+                          <div class="col-xs-3">
+                               <#list table.columns as column>
+                                    <#if !column.pk && (column_index%4)==0>
+                                      <div class="form-group">
+                                                  <label class="col-sm-4 control-label grey" for="${column.columnNameLower}">${column.columnAlias}</label>
+                                                  <div class="col-sm-7">
+                                                   <input type="text" name="${column.columnNameLower}" id="${column.columnNameLower}" class="col-xs-12"  />
+                                                  </div>
+                                        </div>
+                                  </#if>
+                                </#list>
+                          </div>
+                           <div class="col-xs-3">
+                               <#list table.columns as column>
+                                    <#if !column.pk && (column_index%4)==1>
+                                      <div class="form-group">
+                                                  <label class="col-sm-4 control-label grey" for="${column.columnNameLower}">${column.columnAlias}</label>
+                                                  <div class="col-sm-7">
+                                                   <input type="text" name="${column.columnNameLower}" id="${column.columnNameLower}" class="col-xs-12"  />
+                                                  </div>
+                                        </div>
+                                  </#if>
+                                </#list>
+                          </div>
+                        <div class="col-xs-3">
+                               <#list table.columns as column>
+                                    <#if !column.pk && (column_index%4)==2>
+                                      <div class="form-group">
+                                                  <label class="col-sm-4 control-label grey" for="${column.columnNameLower}">${column.columnAlias}</label>
+                                                  <div class="col-sm-7">
+                                                   <input type="text" name="${column.columnNameLower}" id="${column.columnNameLower}" class="col-xs-12"  />
+                                                  </div>
+                                        </div>
+                                  </#if>
+                                </#list>
+                          </div>
+                            <div class="col-xs-3">
+                               <#list table.columns as column>
+                                    <#if !column.pk && (column_index%4)==3>
+                                      <div class="form-group">
+                                                  <label class="col-sm-4 control-label grey" for="${column.columnNameLower}">${column.columnAlias}</label>
+                                                  <div class="col-sm-7">
+                                                   <input type="text" name="${column.columnNameLower}" id="${column.columnNameLower}" class="col-xs-12"  />
+                                                  </div>
+                                        </div>
+                                  </#if>
+                                </#list>
+                          </div>
+
+
+
+
+
+                      </div>
+                  </div>
+           </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+
+
+
+
+

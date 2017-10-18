@@ -1,0 +1,309 @@
+  <div class="tabbable tabs-hxqh" wtype="tab" id="14136219988" style="display: block;"> 
+   <div class="widget-header header-color-blue"> 
+    <ul class="nav nav-tabs padding-12 pull-left" role="tablist"> 
+     <li id="14136211872" class="active" wtype="tabgroup" style="list-style-type: none; display: block; position: relative;"><a id="ui-id-2" class="ui-tabs-anchor" role="presentation" tabindex="-1" hid="tabconfig"><font hid="label">List</font></a></li>
+     <li id="14136211873" class="active" wtype="tabgroup" style="list-style-type: none; display: block;"><a id="ui-id-2" class="ui-tabs-anchor" role="presentation" tabindex="-1" hid="tabconfig"><font hid="label"> ${clazzName}</font></a></li>
+
+   </ul> 
+   </div> 
+   <div id="tab_content">   
+       <div style="display: block;" id="tabcon_14136211872" flag="tabflage" class="tab-content"> 
+     <div class="layout">      
+      <div id="14136212226" style="display: block;" class="widget" wtype="table"> 
+       <div datasource="${clazzName}" class="ttable" hid="tableflage" id="tableid" editable="false" query="1=1"
+       mulquery=" select * from ${tableName} ">
+
+
+  <#list table.columns as column>
+
+
+           <div id="14136212289" wtype="tablecol" class="widget" style="display: block; float: left;">
+                   <div class="column">
+                    <label datasource="${column.columnNameUpper}" class="label_font W80" hid="label" width="110">${column.columnAlias}/label>
+                   </div>
+                  </div>
+       </#list>
+
+
+        <div id="14136212346" class="widget" wtype="tablerefcol" style="display: block; float: left;"> 
+         <div class="column"> 
+          <label class="label_font W80" hid="label" datasource="$Actions['tab']('objectname=G03VENDOR&amp;id=${G03VENDORId}&amp;activeNo=1');" cssclass="icon-pencil bigger-130">编辑</label> 
+         </div> 
+        </div>
+        <div class="widget" wtype="tablerefcol" id="14137148211" style="display: block; float: left;"> 
+         <div class="fl column"> 
+          <label class="label_font W80" hid="label" datasource="$Actions['deleteObject']('objectname=G03VENDOR&amp;id=${G03VENDORId}');" cssclass="icon-trash bigger-130"> 删除 </label> 
+         </div> 
+        </div>   
+        
+       </div> 
+      </div> 
+     </div> 
+    </div>    
+    
+    <div style="display: block;" id="tabcon_14136211873" flag="tabflage" class="tab-content"> 
+     <div class="layout"> 
+      <div id="14136227707" style="display: block;" class="widget" wtype="column3"> 
+       <div> 
+        <h4 class="header blue bolder">基本信息</h4> 
+        <div class="row"> 
+         <div class="form-horizontal" role="form">          
+          <div class="col-sm-3"> 
+           <div class="form-group"> 
+              <label class="col-sm-4 control-label grey" for="VENDORNUM">供应商编号</label> 
+              <div class="col-sm-7"> 
+               <input type="text" name="VENDORNUM" id="VENDORNUM" class="col-xs-12" disabled="disabled" /> 
+              </div> 
+             </div> 
+        <div class="form-group" style="display :none">
+            <div class="form-group" >
+              <label class="col-sm-4 control-label grey" for="ORGID">组织</label>
+              <div class="col-sm-7">
+               <input type="text" name="ORGIDdesc" id="ORGIDdesc" class="col-xs-12" disabled="disabled" />
+               <input type="hidden" name="ORGID" id="ORGID" class="col-xs-12" disabled="disabled" />
+             </div>
+            </div>
+        </div>
+             <div class="form-group"> 
+              <label class="col-sm-4 control-label grey" for="TOTALAMOUNT">采购总金额</label> 
+              <div class="col-sm-7"> 
+               <input hid="inputabc" type="text" name="TOTALAMOUNT" id="TOTALAMOUNT" disabled="disabled" class="col-xs-12"  /> 
+              </div> 
+             </div>                        
+          </div>           
+          <div class="col-sm-3"> 
+             <div class="form-group"> 
+              <label class="col-sm-4 control-label grey" for="DESCRIPTION"><span style="color:red">* </span>供应商名称</label> 
+              <div class="col-sm-7"> 
+                <input hid="inputabc" type="text" name="DESCRIPTION" id="DESCRIPTION" class="col-xs-12" validatetype="not null,length 100" /> 
+                <input hid="inputabc" type="hidden" name="GROUPID" id="GROUPID" class="col-xs-12" validatetype="not null"/>
+              </div> 
+             </div> 
+         <div class="form-group" style="display :none"> 
+                <div class="form-group"> 
+                    <label class="col-sm-4 control-label grey" for="SITEID"><span style="color:red">* </span>地点</label> 
+                    <div class="col-sm-7"> 
+                     <div class="input-group" id="COMPANYIDLayout" whereclause="(s.ORGID,s.SITECODE) in(:SITEIDCZ) order by o.ORGID,s.SITECODE" onclick="$Actions['addTableDictWindow']('dictionaryname=SITE s left join ORGANIZATION o on s.ORGID=o.ORGID&amp;bandtxt=s.SITECODE as SITECODE,s.DESCRIPTION as sdesc&amp;bandtxtWidth=80,180&amp;displayinput=SITEID,SITEIDdesc&amp;title=地点编号,地点名称')" action=""> 
+                      <input hid="inputabc" type="hidden" name="SITEID" id="SITEID"  readonly="readonly" class="form-control" /> 
+                       <input hid="inputabc" authid="" style="" type="text" name="SITEIDdesc" id="SITEIDdesc" class="form-control" readonly="true"  validatetype="not null"/> 
+                      <span type="button" class="input-group-addon" value="地点"><i class="icon-search"></i></span> 
+                     </div> 
+                    </div> 
+                   </div>  
+         </div>  
+             <div class="form-group"> 
+              <label class="col-sm-4 control-label grey" for="nums">采购单数</label> 
+              <div class="col-sm-7"> 
+                <input hid="inputabc" type="text" name="nums" id="nums" disabled="disabled" class="form-control" />
+              </div>       
+            </div>
+                                
+          </div>           
+          <div class="col-sm-3"> 
+           <div class="form-group"> 
+              <label class="col-sm-4 control-label grey" for="STATUS">状态</label> 
+              <div class="col-sm-7"> 
+               <select class="width-80 chosen-select" data-placeholder="" id="STATUS" name="STATUS">
+                   <option value="活动">活动</option>
+                   <option value="停用">停用</option>
+               </select>
+              </div> 
+             </div> 
+         
+            <div class="form-group"> 
+              <label class="col-sm-4 control-label grey" for="bnum">报价项数</label> 
+              <div class="col-sm-7"> 
+                <input hid="inputabc" type="text" name="bnum" id="bnum" disabled="disabled" class="form-control" />
+              </div> 
+            </div>         
+            <div class="form-group" style="display :none">      
+               <div class="form-group" style="display:none"> 
+                  <label class="col-sm-4 control-label grey" for="CUSTTYPE">类型</label> 
+                  <div class="col-sm-7"> 
+                   <select class="width-80 chosen-select" data-placeholder="" id="CUSTTYPE" name="CUSTTYPE">
+                       <option value="供应商" selected="selected">供应商</option>
+                       <option value="运输商">运输商</option>
+                       <option value="生产厂家">生产厂家</option>
+                   </select>
+                  </div> 
+                 </div>                         
+             </div> 
+        </div>     
+          <div class="col-sm-3"> 
+             <div class="form-group"> 
+              <label class="col-sm-4 control-label grey" for="CHANGEBY">创建人</label> 
+              <div class="col-sm-7">
+                <input hid="inputabc" type="text" name="CHANGEBYdesc" id="CHANGEBYdesc" disabled="disabled" class="col-xs-12" style="background:#EEE" />
+                <input hid="inputabc" type="hidden" name="CHANGEBY" id="CHANGEBY" disabled="disabled" class="col-xs-12" style="background:#EEE" />
+              </div> 
+             </div>     
+            <div class="form-group"> 
+              <label class="col-sm-4 control-label grey" for="DATETIME">创建时间</label> 
+              <div class="col-sm-7"> 
+                <input hid="inputabc" type="text" name="DATETIME" id="DATETIME" class="form-control" disabled="disabled" />
+              </div> 
+            </div>    
+             <div class="form-group"> 
+              <label class="col-sm-4 control-label grey" for="OUTSIDE">国内/国外</label> 
+              <div class="col-sm-7"> 
+               <select class="width-80 chosen-select" data-placeholder="" id="OUTSIDE" name="OUTSIDE">
+                   <option value="国内">国内</option>
+                   <option value="国外">国外</option>
+               </select>
+              </div> 
+             </div> 
+                      
+       </div>              
+         </div> 
+        </div> 
+     <div class="row">
+      <div class="form-horizontal" role="form"> 
+       <div class="col-sm-6"> 
+          <div class="form-group"> 
+            <label class="col-sm-2 control-label grey" for="NOTE">企业概况</label> 
+              <div class="col-sm-9"> 
+               <textarea class="form-control" name="NOTE" id="NOTE" validatetype="length 254"></textarea> 
+              </div> 
+             </div>
+        </div>            
+        </div>     
+     </div>     
+    </div> 
+   </div> 
+      <div id="14136227707" style="display: block;" class="widget" wtype="column3"> 
+       <div> 
+        <h4 class="header blue bolder">详细信息</h4> 
+        <div class="row"> 
+         <div class="form-horizontal" role="form"> 
+         
+          <div class="col-sm-3"> 
+            <div class="form-group"> 
+            <label class="col-sm-4 control-label grey" for="TYPE">所在城市</label> 
+            <div class="col-sm-7"> 
+             <div class="input-group" > 
+              <input hid="inputabc" type="text" name="TYPE" id="TYPE" class="form-control" /> 
+              <span type="button" class="input-group-addon" value="城市" id="CITYLayout" onclick="$Actions['addTableDictWindow']('dictionaryname=SF_DICT_ITEM&amp;bandtxt=TEXT&amp;displayinput=TYPE&amp;title=城市,城市&amp;whereclause=dictid${city}')" ><i class="icon-search"></i></span> 
+             </div> 
+            </div> 
+           </div>        
+             <div class="form-group"> 
+              <label class="col-sm-4 control-label grey" for="CONTACT">联系人</label> 
+              <div class="col-sm-7"> 
+               <input type="text" name="CONTACT" id="CONTACT" class="col-xs-12"  /> 
+              </div> 
+             </div>            
+              <div class="form-group"> 
+                <label class="col-sm-4 control-label grey" for="PAYMENTTERMS"> 支付条款 </label> 
+                <div class="col-sm-7"> 
+                 <select class="width-80 chosen-select-input" id="PAYMENTTERMS" name="PAYMENTTERMS">
+                    <option value="">　</option>
+                    <option value="一次性付清">一次性付清</option>
+                    <option value="预付30%货款">预付30%货款</option>
+                    <option value="发货前付清70%货款">发货前付清70%货款</option>
+                 </select>                  
+                </div> 
+               </div>              
+          </div>           
+          <div class="col-sm-3"> 
+             <div class="form-group"> 
+              <label class="col-sm-3 control-label grey" for="FAX">传真</label> 
+              <div class="col-sm-7"> 
+               <input type="text" name="FAX" id="FAX" validatetype="telephone" class="col-xs-12"  /> 
+              </div> 
+             </div> 
+           <div class="form-group"> 
+              <label class="col-sm-3 control-label grey" for="PHONE">联系电话</label> 
+              <div class="col-sm-7"> 
+               <input type="text" name="PHONE" id="PHONE" validatetype="phone" class="col-xs-12" /> 
+              </div> 
+             </div> 
+             <div class="form-group"> 
+              <label class="col-sm-3 control-label grey" for="SHIPVIA">运输方式</label> 
+              <div class="col-sm-7"> 
+               <font class="fl"> 
+                   <select class="width-80 chosen-select-input" data-placeholder="" id="SHIPVIA" name="SHIPVIA" > 
+                       <option value="">　</option>
+                       <option value="飞机">飞机</option>
+                       <option value="火车">火车</option>
+                       <option value="汽车">汽车</option>
+                       <option value="轮船">轮船</option>
+                       <option value="快递">快递</option>                        
+                   </select> 
+               </font> 
+              </div> 
+             </div>                          
+          </div>           
+          <div class="col-sm-3"> 
+            <div class="form-group"> 
+              <label class="col-sm-4 control-label grey" for="REMITCONTACT">注册基金</label> 
+              <div class="col-sm-7"> 
+                <input hid="inputabc" type="text" name="REMITCONTACT" id="REMITCONTACT" class="form-control" />
+              </div> 
+            </div>        
+             <div class="form-group"> 
+              <label class="col-sm-4 control-label grey" for="CURRENCYCODE">货币类型</label> 
+              <div class="col-sm-7"> 
+                <div class="input-group" id="CURRENCYCODELayout" whereclause="ORGID${:ORGIDcz} and SITEID${:SITEIDcz} " onclick="$Actions['addTableDictWindow']('dictionaryname=G01CURRENCY&amp;bandtxt=CURRENCYCODE,DESCRIPTION&amp;displayinput=CURRENCYCODE,CURRENCYCODEdesc&amp;title=货币,描述')" action=""> 
+                <input hid="inputabc" type="text" name="CURRENCYCODEdesc" id="CURRENCYCODEdesc" class="form-control" readonly="readonly" /> 
+                <input hid="inputabc" type="hidden" name="CURRENCYCODE" id="CURRENCYCODE" class="form-control" readonly="readonly" /> 
+                <span type="button" class="input-group-addon" value="货币类型"><i class="icon-search"></i></span> 
+               </div> 
+               </div> 
+             </div>             
+           <div class="form-group"> 
+              <label class="col-sm-4 control-label grey" for="BANKACCOUNT">银行账号</label> 
+              <div class="col-sm-7"> 
+               <input type="text" name="BANKACCOUNT" id="BANKACCOUNT" class="col-xs-12" validatetype="length 32" /> 
+              </div> 
+             </div>   
+          </div>           
+          <div class="col-sm-3"> 
+             <div class="form-group"> 
+              <label class="col-sm-4 control-label grey" for="REGISTRATION1">税务登记号</label> 
+              <div class="col-sm-7"> 
+               <input type="text" name="REGISTRATION1" id="REGISTRATION1" class="col-xs-12" validatetype="length 32" /> 
+              </div> 
+             </div>          
+           <div class="form-group"> 
+              <label class="col-sm-4 control-label grey" for="TAXRATE">税率</label> 
+              <div class="col-sm-7"> 
+               <div class="input-group" id="TAXRATELayout" whereclause="ORGID${:ORGIDcz} and SITEID${:SITEIDcz} " onclick="$Actions['addTableDictWindow']('dictionaryname=G03TAX&amp;bandtxt=TAXRATE,DESCRIPTION&amp;displayinput=TAXRATE&amp;title=税率,税描述')" action=""> 
+                 <input hid="inputabc" type="text" name="TAXRATE" id="TAXRATE" class="form-control" readonly="readonly" /> 
+                <span type="button" class="input-group-addon" value="税率"><i class="icon-search"></i></span> 
+               </div> 
+              </div> 
+             </div>  
+            <div class="form-group"> 
+              <label class="col-sm-4 control-label grey" for="OPENACCOUNT">开户行</label> 
+              <div class="col-sm-7"> 
+               <input type="text" name="OPENACCOUNT" id="OPENACCOUNT" class="col-xs-12" validatetype="length 200" /> 
+              </div> 
+             </div>              
+          </div> 
+         </div> 
+        </div>
+        <div class="row"> 
+         <div class="form-horizontal" role="form"> 
+           <div class="col-sm-6"> 
+             <div class="form-group"> 
+              <label class="col-sm-2 control-label grey" for="ADDRESS">地址</label> 
+              <div class="col-sm-9"> 
+               <input type="text" name="ADDRESS" id="ADDRESS" class="col-xs-12"  /> 
+              </div> 
+             </div>            
+            <div class="form-group"> 
+             <label class="col-sm-2 control-label grey" for="SCOPE">经营范围</label> 
+            <div class="col-sm-9">                          
+             <textarea class="form-control" id="SCOPE" name="SCOPE" validatetype="length 254"></textarea> 
+           </div> 
+          </div> 
+         </div> 
+         </div> 
+        </div>             
+       </div> 
+      </div> 
+     </div> 
+    </div>  
+    
+    </div>
+   </div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
